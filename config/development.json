@@ -1,2 +1,5 @@
 {
+    "db": {
+		"connString": "postgres://postgresDev:postgresDev@localhost:5432/postgresDev"
+	}
 }
