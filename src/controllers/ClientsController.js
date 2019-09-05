@@ -33,6 +33,22 @@ class ClientsController {
 
 		return { message: 'success' };
 	}
+
+	// PUT - Update a client by id
+	static async updateOne(req) {
+		const { clientId } = req.params;
+		await validator.validate('ClientModel', req.body);
+		const payloadHash = ClientModel.hashClient(req.body);
+
+		let isSuccessful = await ClientModel.updateOne(clientId, req.body, payloadHash);
+
+		if( isSuccessful )
+		{
+			return await ClientModel.getOne( clientId );
+		}
+		// TODO invalidate cache and update it
+		return false;
+	}
 }
 
 

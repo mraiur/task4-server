@@ -1,13 +1,25 @@
 const chai = require('chai');
 const td = require('testdouble');
-const ClientsController = require('../../../src/controllers/ClientsController');
+const dbTestHelper = require('./../../helpers/database');
 
 const { expect } = chai;
 
+
 describe('clientsController', () => {
-	afterEach = () => {
+
+	beforeEach(async () => {
+		await dbTestHelper.cleanup();
+		await dbTestHelper.populate();
+	});
+
+	afterEach(async () => {
+		await dbTestHelper.cleanup();
 		td.reset();
-	};
+	});
+
+	after(async () => {
+		await dbTestHelper.close();
+	});
 
 	it('#get should return clients list', async () => {
 		const clientsList = [
@@ -16,7 +28,6 @@ describe('clientsController', () => {
 
 		const clientModel = td.replace('../../../src/models/ClientModel');
 		td.when(clientModel.getList()).thenResolve(clientsList);
-
 		const ClientsController = require('../../../src/controllers/ClientsController');
 
 		const getResult = await ClientsController.get();
@@ -53,15 +64,53 @@ describe('clientsController', () => {
 			.thenReturn({ valid: true });
 
 		const clientModel = td.replace('../../../src/models/ClientModel');
-		td.when(clientModel.createOne(req.body)).thenResolve({ client: 'client-created' });
+		td.when(clientModel.createOne(req.body, clientModel.hashClient(req.body))).thenResolve({ client: 'client-created' });
 
+		const ClientsController = require('../../../src/controllers/ClientsController');
 		const createOneResult = await ClientsController.createOne(req);
-
 
 		expect(createOneResult)
 			.to.be.an('object')
 			.and.has.property('client')
 			.that.is.an('string');
+	});
+
+	it('#updateOne should update one client', async () => {
+
+		const reqCreate = {
+			body: {
+				phoneNumber: '+4407777712333',
+				firstname: 'John',
+				surname: 'Doe',
+			},
+		};
+
+		const ClientsController = require('../../../src/controllers/ClientsController');
+
+		const clientModel = td.replace('../../../src/models/ClientModel');
+		td.when(clientModel.createOne(reqCreate.body, clientModel.hashClient(reqCreate.body)))
+			.thenResolve({ client: 'client-created' });
+		const createOneResult = await ClientsController.createOne(reqCreate);
+
+		const req = {
+			params: { clientId: createOneResult.client },
+			body: {
+				phoneNumber: '+4407777712666',
+				firstname: 'Dorian',
+				surname: 'Gray',
+			},
+		};
+
+		const validator = td.replace('../../../src/helpers/validator');
+		td.when(validator.validate(td.matchers.isA(String), req.body))
+			.thenReturn({ valid: true });
+
+		const updateOneResult = await ClientsController.updateOne(req);
+
+		expect(updateOneResult).to.be.an('object');
+		expect(updateOneResult).to.have.property('phonenumber').not.equal(req.body.phoneNumber);
+		expect(updateOneResult).to.have.property('firstname').equal(req.body.firstname);
+		expect(updateOneResult).to.have.property('surname').equal(req.body.surname);
 	});
 
 	it('#deleteOne should return success', async () => {

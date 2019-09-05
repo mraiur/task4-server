@@ -10,7 +10,7 @@
     "watch:dev": "pm2 start . --watch",
     "test": "mocha --timeout 10000 --recursive",
     "test:helpers": "mocha --timeout 10000 --recursive test/helpers",
-    "test:unit": "mocha --timeout 10000 --recursive test/unit",
+    "test:unit": "NODE_ENV=test mocha --timeout 10000 --recursive test/unit",
     "test:integration": "mocha --timeout 10000 --recursive test/integration",
     "test:e2e": "mocha --timeout 10000 --recursive test/e2e",
     "posttest": "npm run lint",

@@ -1,3 +1,15 @@
 {
-	
+	"db": {
+		"connString": "postgres://dev:dev@localhost:5432/software_test_base"
+	},
+	"logger": {
+		"file": {
+			"enabled": false,
+			"level": "error"
+		},
+		"console": {
+			"enabled": true,
+			"level": "error"
+		}
+	}
 }
