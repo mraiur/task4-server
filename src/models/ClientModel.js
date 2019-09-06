@@ -28,16 +28,13 @@ class ClientModel {
 
 	// Update user data by id
 	static async updateOne(id, clientData, payloadHash) {
-		let status = await db.result(queries.clients.updateOne, {
+		const status = await db.result(queries.clients.updateOne, {
 			...clientData,
 			payloadHash,
 			id,
 		});
 
-		if(status && status.rowCount>0){
-			return true;
-		}
-		return false;
+		return status && status.rowCount > 0;
 	}
 
 	// Hash client data

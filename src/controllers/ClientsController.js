@@ -40,13 +40,12 @@ class ClientsController {
 		await validator.validate('ClientModel', req.body);
 		const payloadHash = ClientModel.hashClient(req.body);
 
-		let isSuccessful = await ClientModel.updateOne(clientId, req.body, payloadHash);
+		const isSuccessful = await ClientModel.updateOne(clientId, req.body, payloadHash);
 
-		if( isSuccessful )
-		{
-			return await ClientModel.getOne( clientId );
+		if (isSuccessful) {
+			const client = await ClientModel.getOne(clientId);
+			return client;
 		}
-		// TODO invalidate cache and update it
 		return false;
 	}
 }

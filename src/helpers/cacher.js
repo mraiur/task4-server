@@ -14,6 +14,12 @@ class cacher {
 	getCache() {
 		return this.cache;
 	}
+	removeFromCache(key) {
+		if (this.isCached(key)) {
+			return this.cache.delete(key);
+		}
+		return false;
+	}
 }
 
 // eslint-disable-next-line new-cap

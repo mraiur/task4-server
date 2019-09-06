@@ -50,4 +50,24 @@ describe('cacher', () => {
 			.to.be.an('string')
 			.that.equals(testValue);
 	});
+
+	it('#removeFromCache should remove found key', () => {
+		const testKey = 'some-key';
+		const testValue = 'some-value';
+		cacher.cacheAdd(testKey, testValue);
+		const removeResult = cacher.removeFromCache(testKey);
+
+		expect(removeResult)
+			.to.be.an('boolean')
+			.that.equals(true);
+	});
+
+	it('#removeFromCache should fail when key not found', () => {
+		const testKey = 'randomKey';
+		const removeResult = cacher.removeFromCache(testKey);
+
+		expect(removeResult)
+			.to.be.an('boolean')
+			.that.equals(false);
+	});
 });
