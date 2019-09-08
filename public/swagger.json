@@ -91,6 +91,9 @@
 	"definitions": {
 		"ClientModel": {
 			"properties": {
+				"id" : {
+					"type": "string"
+				},
 				"firstname": {
 					"type": "string",
 					"minLength": 1,
@@ -101,7 +104,7 @@
 					"minLength": 1,
 					"maxLength": 64
 				},
-				"phoneNumber": {
+				"phonenumber": {
 					"type": "string",
 					"pattern": "^\\+4407([0-9]{9,14})"
 				}
@@ -109,7 +112,7 @@
 			"required": [
 				"firstname",
 				"surname",
-				"phoneNumber"
+				"phonenumber"
 			]
 		}
 	}

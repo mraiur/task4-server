@@ -2,6 +2,7 @@ const config = require('config').get('service');
 const express = require('express');
 const logger = require('./helpers/logger');
 const path = require('path');
+const cors = require('cors');
 const requestLogger = require('./middleware/requestLogger');
 const migration = require('./models/migration');
 const { apiRoutes } = require('./routes');
@@ -11,6 +12,7 @@ const { asyncRouteHandler } = require('./middleware/routeHandlers');
 const app = express();
 
 // Register Application middleware
+app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
 app.use(express.static(path.join(__dirname, '../public')));

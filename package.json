@@ -5,7 +5,8 @@
   "main": "./src/app.js",
   "scripts": {
     "start": "node ./src/app.js",
-    "debug": "node --nolazy --inspect-brk=2029 ./src/app.js",
+    "start-dev": "NODE_ENV=development node ./src/app.js",
+    "debug": "NODE_ENV=development node --nolazy --inspect-brk=2029 ./src/app.js",
     "watch": "npm run watch:dev",
     "watch:dev": "pm2 start . --watch",
     "test": "mocha --timeout 10000 --recursive",
@@ -26,11 +27,12 @@
   "license": "ISC",
   "dependencies": {
     "config": "^3.0.1",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "pg-promise": "^8.6.4",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
-    "swagger-model-validator": "^3.0.8",
+    "swagger-model-validator": "^3.0.11",
     "winston": "^3.2.1"
   },
   "devDependencies": {
